@@ -8,7 +8,7 @@ Install
 
 .. code-block::
 
-   pip install -U git+https://github.com....conductor
+   pip install -U git+https://github.com/Netherdrake/conductor
 
 
 First Steps
