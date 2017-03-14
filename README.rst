@@ -1,7 +1,7 @@
 conductor - Steem Witness Toolkit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`conductor` is a user friendly utility that will help you manage your STEEM witness.
+*conductor* is a user friendly, KISS utility that will help you manage your STEEM witness.
 
 Install
 =======
@@ -14,15 +14,15 @@ Install
 First Steps
 ===========
 First, we need to setup our BIP38 encrypted wallet, and import our witness Active key. This key is required for feed updates.
-We store it in an encrypted wallet, so that we don't have to provide the key every time we use `conductor`.
+We store it in an encrypted wallet, so that we don't have to provide the key every time we use *conductor*.
 
-Fortunately, `conductor` comes with a wizard that will guide us trough the process. We invoke it with:
+Fortunately, *conductor* comes with a wizard that will guide us trough the process. We invoke it with:
 
 .. code-block::
 
    conductor init
 
-`conductor` will then let us pick a strong wallet password, and import our witness active key.
+*conductor* will then let us pick a strong wallet password, and import our witness active key.
 
 
 Blockchain Properties
@@ -60,7 +60,7 @@ Price feeds are a vital component of STEEM ecosystem, as they power SBD->STEEM c
 Witnesses act as an oracle between the blockchain and real-world, by providing honest input on what the implied price of STEEM is.
 Furthermore, the prices may contain *bias* to loosely support the SBD stablecoin's peg to USD.
 
-`conductor` ships with ``markets`` module from `SteemData <https://steemdata.com/>`_.
+*conductor* ships with ``markets`` module from `SteemData <https://steemdata.com/>`_.
 This module interfaces with 3rd party exchanges to fetch VWAP (volume weighted average prices) mean (average of VWAP's from all exchanges) prices.
 
 **Exchanges Used:**
@@ -86,7 +86,7 @@ this tool will automatically disable your witness to avoid further misses.
 
    conductor killswitch 25
 
-`25` in this case represents the number of blocks we are allowed to miss in rolling 2 hour period before the killswitch kicks in.
+``25`` in this case represents the number of blocks we are allowed to miss in rolling 2 hour period before the killswitch kicks in.
 
 
 Witness Enable/Disable
