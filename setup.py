@@ -17,7 +17,7 @@ setup(
                    'pytest-console-scripts'],
     install_requires=[
         'Click',
-        'steem',
+        # 'steem',
         'grequests',
         'tabulate',
         # 'maya',

@@ -1,8 +1,10 @@
 import click
 from click import echo
+from steem import Steem
 from tabulate import tabulate
 
 from .markets import Markets
+from .methods import run_price_feeds
 
 context_settings = dict(help_option_names=['-h', '--help'])
 
@@ -51,3 +53,13 @@ def tickers():
 def disable():
     pass
 
+
+@witness.command()
+def feed():
+    run_price_feeds('furion')
+
+
+@witness.command()
+def dockertest():
+    s = Steem()
+    echo(s.get_witness_by_account('furion'))
