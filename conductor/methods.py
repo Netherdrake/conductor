@@ -1,4 +1,5 @@
 import time
+import traceback
 
 from steem import Steem
 
@@ -45,8 +46,15 @@ def refresh_price_feeds(witness_name):
 
 def run_price_feeds(witness_name):
     while True:
-        refresh_price_feeds(witness_name)
-        time.sleep(settings['sleep_time_seconds'])
+        try:
+            refresh_price_feeds(witness_name)
+            time.sleep(settings['sleep_time_seconds'])
+        except KeyboardInterrupt:
+            print('Quitting...')
+            return
+        except:
+            print(traceback.format_exc())
+            time.sleep(10)
 
 
 if __name__ == '__main__':
