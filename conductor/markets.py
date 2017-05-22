@@ -4,7 +4,8 @@ from operator import mul
 from pprint import pprint
 from statistics import mean
 
-import grequests
+import requests
+from funcy.flow import silent
 from steem import Steem
 from steem.amount import Amount
 
@@ -21,8 +22,7 @@ class Tickers(object):
             "https://www.bitstamp.net/api/v2/ticker/btcusd/",
             "https://btc-e.com/api/2/btc_usd/ticker",
         ]
-        rs = (grequests.get(u, timeout=2) for u in urls)
-        responses = list(grequests.map(rs, exception_handler=lambda x, y: ""))
+        responses = list(silent(requests.get)(u, timeout=2) for u in urls)
 
         for r in [x for x in responses if hasattr(x, "status_code") and x.status_code == 200 and x.json()]:
             if "bitfinex" in r.url:
@@ -57,8 +57,7 @@ class Tickers(object):
             "https://poloniex.com/public?command=returnTicker",
             "https://bittrex.com/api/v1.1/public/getticker?market=BTC-STEEM",
         ]
-        rs = (grequests.get(u, timeout=2) for u in urls)
-        responses = list(grequests.map(rs, exception_handler=lambda x, y: ""))
+        responses = list(silent(requests.get)(u, timeout=2) for u in urls)
 
         for r in [x for x in responses if hasattr(x, "status_code") and x.status_code == 200 and x.json()]:
             if "poloniex" in r.url:
@@ -81,8 +80,7 @@ class Tickers(object):
             "https://poloniex.com/public?command=returnTicker",
             "https://bittrex.com/api/v1.1/public/getticker?market=BTC-SBD",
         ]
-        rs = (grequests.get(u, timeout=2) for u in urls)
-        responses = list(grequests.map(rs, exception_handler=lambda x, y: ""))
+        responses = list(silent(requests.get)(u, timeout=2) for u in urls)
 
         for r in [x for x in responses if hasattr(x, "status_code") and x.status_code == 200 and x.json()]:
             if "poloniex" in r.url:

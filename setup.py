@@ -18,7 +18,6 @@ setup(
     install_requires=[
         'Click',
         # 'steem',
-        'grequests',
         'tabulate',
         # 'maya',
         # 'toolz',
