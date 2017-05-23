@@ -1,10 +1,10 @@
 import click
 from click import echo
 from prettytable import PrettyTable
-from steem import Steem
 from tabulate import tabulate
 
 from .feeds import run_price_feeds
+from .markets import Markets
 from .watchdog import (
     watchdog,
     enable_witness,
@@ -13,7 +13,6 @@ from .watchdog import (
     current_signing_key,
     total_missed,
 )
-from .markets import Markets
 
 context_settings = dict(help_option_names=['-h', '--help'])
 
@@ -89,10 +88,3 @@ def status():
     t.align = "l"
     t.add_row([is_enabled, misses, signing_key])
     echo(t)
-
-
-@witness.command(name='docker-test')
-def docker_test():
-    """ Test if script works. """
-    s = Steem()
-    echo(s.get_witness_by_account('furion'))
