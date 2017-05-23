@@ -1,13 +1,17 @@
 import click
 from click import echo
+from prettytable import PrettyTable
 from steem import Steem
 from tabulate import tabulate
 
 from .feeds import run_price_feeds
-from .killswitch import (
+from .watchdog import (
     watchdog,
     enable_witness,
     disable_witness,
+    is_witness_enabled,
+    current_signing_key,
+    total_missed,
 )
 from .markets import Markets
 
@@ -53,24 +57,38 @@ def feed():
 
 
 @witness.command()
-@click.confirmation_option(help='Are you sure you want to start the witness?')
-def enable():
-    """Enable a witness."""
-    enable_witness()
+@click.argument('signing_key')
+def enable(signing_key):
+    """Enable a witness, or change key."""
+    tx = enable_witness(signing_key) or 'This key is already set'
+    echo(tx)
 
 
 @witness.command()
 @click.confirmation_option(help='Are you sure you want to stop the witness?')
 def disable():
     """Disable a witness."""
-    disable_witness()
+    tx = disable_witness() or 'Witness already disabled'
+    echo(tx)
 
 
 @witness.command(name='kill-switch')
 def kill_switch():
     """Monitor for misses w/ disable."""
-    enable_witness()
     watchdog()
+
+
+@witness.command(name='status')
+def status():
+    """Print basic witness info."""
+    is_enabled = is_witness_enabled()
+    signing_key = current_signing_key()
+    misses = total_missed()
+
+    t = PrettyTable(["Enabled", "Misses", "Key"])
+    t.align = "l"
+    t.add_row([is_enabled, misses, signing_key])
+    echo(t)
 
 
 @witness.command(name='docker-test')

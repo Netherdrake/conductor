@@ -19,9 +19,9 @@ setup(
         'Click',
         'steem',
         'tabulate',
-        'maya',
-        'toolz',
-        'funcy',
+        # 'maya',
+        # 'toolz',
+        # 'funcy',
     ],
     entry_points={
         'console_scripts': [
