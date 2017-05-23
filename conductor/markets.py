@@ -22,7 +22,7 @@ class Tickers(object):
             "https://www.bitstamp.net/api/v2/ticker/btcusd/",
             "https://btc-e.com/api/2/btc_usd/ticker",
         ]
-        responses = list(silent(requests.get)(u, timeout=2) for u in urls)
+        responses = list(silent(requests.get)(u, timeout=5) for u in urls)
 
         for r in [x for x in responses if hasattr(x, "status_code") and x.status_code == 200 and x.json()]:
             if "bitfinex" in r.url:
@@ -57,7 +57,7 @@ class Tickers(object):
             "https://poloniex.com/public?command=returnTicker",
             "https://bittrex.com/api/v1.1/public/getticker?market=BTC-STEEM",
         ]
-        responses = list(silent(requests.get)(u, timeout=2) for u in urls)
+        responses = list(silent(requests.get)(u, timeout=5) for u in urls)
 
         for r in [x for x in responses if hasattr(x, "status_code") and x.status_code == 200 and x.json()]:
             if "poloniex" in r.url:
@@ -80,7 +80,7 @@ class Tickers(object):
             "https://poloniex.com/public?command=returnTicker",
             "https://bittrex.com/api/v1.1/public/getticker?market=BTC-SBD",
         ]
-        responses = list(silent(requests.get)(u, timeout=2) for u in urls)
+        responses = list(silent(requests.get)(u, timeout=5) for u in urls)
 
         for r in [x for x in responses if hasattr(x, "status_code") and x.status_code == 200 and x.json()]:
             if "poloniex" in r.url:
