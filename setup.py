@@ -17,11 +17,11 @@ setup(
                    'pytest-console-scripts'],
     install_requires=[
         'Click',
-        # 'steem',
+        'steem',
         'tabulate',
-        # 'maya',
-        # 'toolz',
-        # 'funcy',
+        'maya',
+        'toolz',
+        'funcy',
     ],
     entry_points={
         'console_scripts': [
