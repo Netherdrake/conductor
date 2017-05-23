@@ -47,12 +47,15 @@ def disable_witness():
 
 
 def watchdog():
+    if not is_witness_enabled():
+        print("Cannot monitor a disabled witness.")
+        return
     threshold = total_missed() + disable_after
     while True:
         if total_missed() > threshold:
             disable_witness()
 
             print("Witness %s Disabled!" % witness_name)
-            quit(0)
+            return
 
         time.sleep(60)
