@@ -1,5 +1,8 @@
+from configparser import ConfigParser
+
 import click
 from click import echo
+from os.path import dirname, join, expanduser
 from prettytable import PrettyTable
 from tabulate import tabulate
 
@@ -88,3 +91,13 @@ def status():
     t.align = "l"
     t.add_row([is_enabled, misses, signing_key])
     echo(t)
+
+
+def init_config():
+    config = ConfigParser()
+    config.read([
+        # join(dirname(__file__), '../config/defaults.ini'),
+        expanduser('~/.witness.ini'),
+        'witness.ini',
+    ])
+    return config
