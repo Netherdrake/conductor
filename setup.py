@@ -25,6 +25,6 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'conductor=conductor.cli:witness',
+            'conductor=conductor.cli:conductor',
         ]
     })

@@ -1,8 +1,7 @@
-from configparser import ConfigParser
+from pprint import pprint
 
 import click
 from click import echo
-from os.path import dirname, join, expanduser
 from prettytable import PrettyTable
 from tabulate import tabulate
 
@@ -15,31 +14,68 @@ from .watchdog import (
     is_witness_enabled,
     current_signing_key,
     total_missed,
+    get_witness,
 )
+
+
+def output(data):
+    if type(data) == dict:
+        echo('\nOutput:\n' + 7 * '_')
+        pprint(data)
+    else:
+        echo(data)
+
 
 context_settings = dict(help_option_names=['-h', '--help'])
 
 
 @click.group(context_settings=context_settings)
-def witness():
+def conductor():
     """Steem Witness Toolkit."""
     pass
 
 
-@witness.command()
+@conductor.command()
 def init():
     """Add your witness account."""
-    echo('hi')
+    account = click.prompt('What is your witness account name?', type=str)
+    witness = get_witness(account)
+    if witness:
+        # todo save to witness.ini
+        echo('Imported a witness %s with its existing settings.' % account)
+        output(witness)
+    else:
+        click.confirm('Witness %s does not exist. Would you like to create it?' % account, abort=True)
+        witness_url = click.prompt(
+            'What is your witness URL? (ie: https://steemit.com/@%s/witness-announcement)' % account,
+            type=str,
+        )
+        witness_props = dict()
+        witness_props['account_creation_fee'] = click.prompt(
+            'How much should be account creation fee? (ie: 0.500 STEEM)',
+            type=str,
+        )
+        witness_props['maximum_block_size'] = click.prompt(
+            'What should be the maximum block size? (ie: 65536)',
+            default=65536,
+        )
+        witness_props['sbd_interest_rate'] = click.prompt(
+            'What should be the SBD interest rate? (ie: 100 for 1%)',
+            default=100,
+        )
 
-    # see if wallet password is present
-    # if not, create wallet
-    # ask for witness name
-    # if active key not present, set it
-    # auto-import blockchain settings. ask user to confirm each one.
-    # ask if we should enable the witness (if disabled)
+        # tx = update_witness(
+        #     witness_name=account,
+        #     signing_key='',
+        #     witness_url=witness_url,
+        #     witness_props=witness_props,
+        # )
+        # # todo add to config
+        # echo('Witness %s created!' % account)
+        # output(tx)
 
 
-@witness.command()
+@conductor.command()
 def tickers():
     """Print Tickers."""
     echo('Loading...\n')
@@ -52,35 +88,35 @@ def tickers():
     echo(tabulate(data.items(), headers=['Symbol', 'Price'], numalign="right", tablefmt='orgtbl'))
 
 
-@witness.command()
+@conductor.command()
 def feed():
     """Update Price Feeds."""
     run_price_feeds('furion')
 
 
-@witness.command()
+@conductor.command()
 @click.argument('signing_key')
 def enable(signing_key):
     """Enable a witness, or change key."""
     tx = enable_witness(signing_key) or 'This key is already set'
-    echo(tx)
+    output(tx)
 
 
-@witness.command()
+@conductor.command()
 @click.confirmation_option(help='Are you sure you want to stop the witness?')
 def disable():
     """Disable a witness."""
     tx = disable_witness() or 'Witness already disabled'
-    echo(tx)
+    output(tx)
 
 
-@witness.command(name='kill-switch')
+@conductor.command(name='kill-switch')
 def kill_switch():
     """Monitor for misses w/ disable."""
     watchdog()
 
 
-@witness.command(name='status')
+@conductor.command(name='status')
 def status():
     """Print basic witness info."""
     is_enabled = is_witness_enabled()
@@ -91,13 +127,3 @@ def status():
     t.align = "l"
     t.add_row([is_enabled, misses, signing_key])
     echo(t)
-
-
-def init_config():
-    config = ConfigParser()
-    config.read([
-        # join(dirname(__file__), '../config/defaults.ini'),
-        expanduser('~/.witness.ini'),
-        'witness.ini',
-    ])
-    return config

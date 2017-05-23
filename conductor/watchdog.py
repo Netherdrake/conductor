@@ -1,4 +1,6 @@
 import time
+from configparser import ConfigParser
+from os.path import expanduser
 
 from steem import Steem
 
@@ -16,12 +18,26 @@ witness_props = {
 }
 
 
+def config():
+    c = ConfigParser()
+    c.read([
+        # join(dirname(__file__), '../config/defaults.ini'),
+        expanduser('~/.witness.ini'),
+        'witness.ini',
+    ])
+    return c
+
+
+def get_witness(account):
+    return steem.get_witness_by_account(account)
+
+
 def total_missed():
-    return steem.get_witness_by_account(witness_name)['total_missed']
+    return get_witness(witness_name)['total_missed']
 
 
 def current_signing_key():
-    return steem.get_witness_by_account(witness_name)['signing_key']
+    return get_witness(witness_name)['signing_key']
 
 
 def witness_set_signing_key(signing_key):
@@ -37,7 +53,7 @@ def is_witness_enabled():
 
 
 def enable_witness(signing_key):
-    if not is_witness_enabled() and current_signing_key() != signing_key:
+    if not is_witness_enabled() or current_signing_key() != signing_key:
         return witness_set_signing_key(signing_key)
 
 
