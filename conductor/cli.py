@@ -4,7 +4,9 @@ import click
 from click import echo
 from prettytable import PrettyTable
 from tabulate import tabulate
+from click_spinner import spinner
 
+from .config import get_config
 from .feeds import run_price_feeds
 from .markets import Markets
 from .watchdog import (
@@ -18,12 +20,20 @@ from .watchdog import (
 )
 
 
-def output(data):
+def heading(title):
+    echo('%s:\n' % title + (len(title) + 1) * '-')
+
+
+def output(data, title=None):
+    if title:
+        heading(title)
+
     if type(data) == dict:
-        echo('\nOutput:\n' + 7 * '_')
         pprint(data)
     else:
         echo(data)
+
+    echo('')
 
 
 context_settings = dict(help_option_names=['-h', '--help'])
@@ -78,20 +88,20 @@ def init():
 @conductor.command()
 def tickers():
     """Print Tickers."""
-    echo('Loading...\n')
-    m = Markets()
-    data = {
-        "BTC/USD": round(m.btc_usd(), 2),
-        "SBD/USD": round(m.sbd_usd_implied(), 3),
-        "STEEM/USD": round(m.steem_usd_implied(), 3),
-    }
+    with spinner():
+        m = Markets()
+        data = {
+            "BTC/USD": round(m.btc_usd(), 2),
+            "SBD/USD": round(m.sbd_usd_implied(), 3),
+            "STEEM/USD": round(m.steem_usd_implied(), 3),
+        }
     echo(tabulate(data.items(), headers=['Symbol', 'Price'], numalign="right", tablefmt='orgtbl'))
 
 
 @conductor.command()
 def feed():
     """Update Price Feeds."""
-    run_price_feeds('furion')
+    run_price_feeds()
 
 
 @conductor.command()
@@ -111,19 +121,23 @@ def disable():
 
 
 @conductor.command(name='kill-switch')
-def kill_switch():
+@click.option('--disable-after', '-a', default=10)
+def kill_switch(disable_after):
     """Monitor for misses w/ disable."""
-    watchdog()
+    watchdog(disable_after)
 
 
 @conductor.command(name='status')
 def status():
     """Print basic witness info."""
-    is_enabled = is_witness_enabled()
-    signing_key = current_signing_key()
-    misses = total_missed()
+    with spinner():
+        is_enabled = is_witness_enabled()
+        signing_key = current_signing_key()
+        misses = total_missed()
 
-    t = PrettyTable(["Enabled", "Misses", "Key"])
-    t.align = "l"
-    t.add_row([is_enabled, misses, signing_key])
-    echo(t)
+        t = PrettyTable(["Enabled", "Misses", "Key"])
+        t.align = "l"
+        t.add_row([is_enabled, misses, signing_key])
+
+    output(t, 'Status')
+    output(get_config(), 'Configuration')

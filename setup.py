@@ -17,6 +17,7 @@ setup(
                    'pytest-console-scripts'],
     install_requires=[
         'Click',
+        'click-spinner',
         'steem',
         'tabulate',
         # 'maya',
