@@ -1,7 +1,7 @@
 conductor - Steem Witness Toolkit
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-*conductor* is a user friendly, KISS utility that will help you manage your STEEM witness.
+*conductor* is a user friendly, KISS utility for creating, updating and management of your witness.
 
 Install
 =======
@@ -13,45 +13,92 @@ Install
 
 First Steps
 ===========
-First, we need to setup our BIP38 encrypted wallet, and import our witness Active key. This key is required for feed updates.
-We store it in an encrypted wallet, so that we don't have to provide the key every time we use *conductor*.
+conductor is built on top of ``steem-python``, and leverages it's BIP38 encrypted wallet to store our witness
+Active key. This key is required for price feed updates.
 
-Fortunately, *conductor* comes with a wizard that will guide us trough the process. We invoke it with:
+To create the wallet, and add our key to it, simply run:
+
+.. code-block::
+
+   steempy addkey
+
+
+Creating or importing your witness
+==================================
 
 .. code-block::
 
    conductor init
 
-*conductor* will then let us pick a strong wallet password, and import our witness active key.
+*conductor* will ask you for your witness (Steem account) name. If the witness already exists, it will import its current settings
+from the blockchain.
+
+Otherwise, it will guide you trough the setup wizard, and create the witness for you.
 
 
-Blockchain Properties
+Updating your witness
 =====================
-Decisions about certain STEEM blockchain properties are delegated to witnesses. Witnesses can influence these properties
-by setting them for their witness, and thus effectively casting a vote.
-
-**Blockchain properties include:**
- * Block Size
- * Account Creation Fee
-
-**To set or update blockchain properties, trigger the wizard:**
+If you wish to change one or more of your witness properties, such as witness url, interest rate, block size, etc., you
+can do so using ``conductor update`` command.
 
 .. code-block::
 
-  conductor props
+    ~ % conductor update
+    What should be your witness URL? [https://steemdb.com/@furion/witness]:
+    How much should be account creation fee? [0.500 STEEM]:
+    What should be the maximum block size? [65536]:
+    What should be the SBD interest rate? [0]: 10
+
+    Configuration:
+    ---------------
+    {'props': {'account_creation_fee': '0.500 STEEM',
+               'maximum_block_size': 65536,
+               'sbd_interest_rate': 10},
+     'witness': {'name': 'furion', 'url': 'https://steemdb.com/@furion/witness'}}
+
+    Do you want to commit the updated values? [y/N]: n
+    Aborted!
+    ~ %
 
 
-Witness Properties
-==================
+Enabling your witness
+=====================
+Enabling your witness is as simple as setting a public signing key.
+This command can also be used for key rotation (for example, if you're falling back to a backup witness node).
 
-**Witness properties include:**
- * Witness Thread URL
-
-**To set or update witness properties, trigger the wizard:**
+**To set a public signing key on your witness run:**
 
 .. code-block::
 
-   conductor props
+   conductor enable <PUBLIC_SIGNING_KEY>
+
+
+Disabling a witness
+===================
+Sometimes you might want to disable your witness yourself. For example, if you're upgrading
+your witness server, and don't want to miss any blocks.
+
+**To disable your witness run:**
+
+.. code-block::
+
+   conductor disable
+
+
+Kill Switch
+===========
+Kill Switch is a witness monitoring utility, that tracks block misses. If your witness server bugs out, and stops producing blocks,
+this tool will automatically disable your witness to avoid further misses.
+
+**To run a killswitch, simply run:**
+
+.. code-block::
+
+   conductor kill-switch
+
+Optionally, we can provide number of blocks number of blocks we are allowed to miss before kill-switch disables our witness.
+We can achieve this by providing ``-n`` argument, like so: ``conductor kill-switch -n 25``.
+By default ``-n`` is 10.
 
 
 Price Feeds
@@ -74,34 +121,69 @@ This module interfaces with 3rd party exchanges to fetch VWAP (volume weighted a
 
    conductor feed
 
-
-Kill Switch
-===========
-Kill Switch is a witness monitoring utility, that tracks block misses. If your witness server bugs out, and stops producing blocks,
-this tool will automatically disable your witness to avoid further misses.
-
-**To run a killswitch, simply run:**
+Usage
+=====
 
 .. code-block::
 
-   conductor killswitch 25
+    ~ % conductor
+    Usage: conductor [OPTIONS] COMMAND [ARGS]...
 
-``25`` in this case represents the number of blocks we are allowed to miss in rolling 2 hour period before the killswitch kicks in.
+      Steem Witness Toolkit.
+
+    Options:
+      -h, --help  Show this message and exit.
+
+    Commands:
+      disable      Disable a witness.
+      enable       Enable a witness, or change key.
+      feed         Update Price Feeds.
+      init         Add your witness account.
+      kill-switch  Monitor for misses w/ disable.
+      status       Print basic witness info.
+      tickers      Print Tickers.
+      update       Update witness properties.
 
 
-Witness Enable/Disable
-======================
-Sometimes you might want to disable your witness yourself. For example, if you're upgrading
-your witness server, and don't want to miss any blocks.
+There are two additional, read only commands we haven't covered yet. ``status`` and ``tickers``.
+They simply print some info for us.
 
-**To disable your witness run:**
+**Status**
 
 .. code-block::
 
-   conductor disable
+    ~ % conductor status
+    Status:
+    -------
+    +---------+--------+-------------------------------------------------------+
+    | Enabled | Misses | Key                                                   |
+    +---------+--------+-------------------------------------------------------+
+    | True    | 105    | STM7WDG2QpThdkRa3G2PYXM7gH9UksoGm4xqoFBrNet6GH7ToNUYx |
+    +---------+--------+-------------------------------------------------------+
 
-**To re-enable your witness run:**
+    Configuration:
+    --------------
+    {'props': {'account_creation_fee': '0.500 STEEM',
+               'maximum_block_size': 65536,
+               'sbd_interest_rate': 0},
+     'witness': {'name': 'furion', 'url': 'https://steemdb.com/@furion/witness'}}
+
+    ~ %
+
+**Tickers**
 
 .. code-block::
 
-   conductor enable
+    ~ % conductor tickers
+    | Symbol    |   Price |
+    |-----------+---------|
+    | BTC/USD   | 2444.31 |
+    | SBD/USD   |   1.804 |
+    | STEEM/USD |    1.19 |
+    ~ %
+
+License
+-------
+MIT.
+
+Pull requests are welcome.

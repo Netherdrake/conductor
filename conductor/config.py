@@ -26,7 +26,7 @@ def get_config():
 
 def set_config(config: dict):
     with open(config_file, 'w') as f:
-        f.write(json.dumps(config))
+        f.write(json.dumps(config, indent=4))
 
 
 def witness(prop: str):

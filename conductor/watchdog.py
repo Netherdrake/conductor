@@ -1,9 +1,11 @@
 import time
 
-from .config import witness, props
 from steem import Steem
 
+from .config import witness, props
+
 steem = Steem()
+null_key = 'STM1111111111111111111111111111111114T1Anm'
 
 
 def get_witness(account):
@@ -34,8 +36,17 @@ def witness_set_props(url, new_props):
         account=witness('name'))
 
 
+def witness_create(config: dict):
+    """ Create a new witness from config file. """
+    return steem.commit.witness_update(
+        signing_key=null_key,
+        url=config['witness']['name'],
+        props=config['props'],
+        account=config['witness']['name'])
+
+
 def is_witness_enabled():
-    return current_signing_key() != 'STM1111111111111111111111111111111114T1Anm'
+    return current_signing_key() != null_key
 
 
 def enable_witness(signing_key):
