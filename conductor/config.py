@@ -20,6 +20,8 @@ def new_config():
 
 
 def get_config():
+    # todo check if our local config is current with blockchain state
+    # as someone might have modified their witness without using conductor
     with open(config_file, 'r') as f:
         return json.loads(f.read())
 

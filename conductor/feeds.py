@@ -27,19 +27,26 @@ def refresh_price_feeds(witness_name):
     markets = Markets()
 
     print("\n" + time.ctime())
-    last_price = get_last_published_price(steem, witness_name)
-    print("Last published price is: " + format(last_price, ".3f"))
 
-    quote = "1.000"
-    if settings['sbd_usd_peg']:
-        quote = round(1 / markets.sbd_usd_implied(), 3)
-    current_price = round(markets.steem_usd_implied() / float(quote), 3)
-    print('Current price: %s' % current_price)
+    # old prices
+    old_adj_price = get_last_published_price(steem, witness_name)
+    print("Old Price: " + format(old_adj_price, ".3f"))
 
-    spread = abs(markets.calc_spread(last_price, current_price))
-    print("Spread between prices: %.3f%%" % spread)
+    # new prices
+    steem_usd = markets.steem_usd_implied()
+    sbd_usd = markets.sbd_usd_implied()
+    quote = round(1 / sbd_usd, 3) if settings['sbd_usd_peg'] else "1.000"
+    quote_adj_current_price = round(steem_usd / float(quote), 3)
+    print('New Price: %s' % quote_adj_current_price)
+    print('\nCurrent STEEM price: %.3f USD' % steem_usd)
+    print('Current SBD price: %.3f USD' % sbd_usd)
+    print('Quote: %s STEEM' % quote)
+
+    # publish new price is spread widens
+    spread = abs(markets.calc_spread(old_adj_price, quote_adj_current_price))
+    print("\nSpread between prices: %.3f%%" % spread)
     if spread > settings['minimum_spread_pct']:
-        steem.commit.witness_feed_publish(current_price, quote=quote, account=witness_name)
+        steem.commit.witness_feed_publish(steem_usd, quote=quote, account=witness_name)
         print("Updated the witness price feed.")
 
 
