@@ -101,6 +101,20 @@ We can achieve this by providing ``-n`` argument, like so: ``conductor kill-swit
 By default ``-n`` is 10.
 
 
+Automatic Failover
+==================
+We can use the Kill Switch to automatically failover as well. Instead of disabling our witness, the kill-switch
+can change our signing key to secondary key (backup node), and then monitor that. If second node misses blocks as well,
+the witness is finally disabled.
+
+**Example**
+
+.. code-block::
+
+   conductor kill-switch --second-key <BACKUP_NODE_PUBLIC_SIGNING_KEY>
+
+See ``conductor kill-switch -h`` for more options.
+
 Price Feeds
 ===========
 Price feeds are a vital component of STEEM ecosystem, as they power SBD->STEEM conversions, as well as rewards estimates.

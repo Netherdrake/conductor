@@ -59,16 +59,21 @@ def disable_witness():
         return witness_set_signing_key('')
 
 
-def watchdog(disable_after: int):
+def watchdog(disable_after: int, second_key: str = None):
     if not is_witness_enabled():
         print("Cannot monitor a disabled witness.")
         return
+
     threshold = total_missed() + disable_after
     while True:
         if total_missed() > threshold:
-            disable_witness()
-
-            print("Witness %s Disabled!" % witness('name'))
+            if second_key:
+                witness_set_signing_key(second_key)
+                print("Witness %s failed over to key: %s" % (witness('name'), second_key))
+                watchdog(disable_after, None)
+            else:
+                disable_witness()
+                print("Witness %s Disabled!" % witness('name'))
             return
 
         time.sleep(60)

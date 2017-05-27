@@ -145,9 +145,10 @@ def disable():
 
 @conductor.command(name='kill-switch')
 @click.option('--disable-after', '-n', default=10)
-def kill_switch(disable_after):
+@click.option('--second-key', '-k', default=None)
+def kill_switch(disable_after, second_key):
     """Monitor for misses w/ disable."""
-    watchdog(disable_after)
+    watchdog(disable_after, second_key)
 
 
 # Status Commands
