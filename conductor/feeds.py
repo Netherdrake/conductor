@@ -2,10 +2,15 @@ import time
 import traceback
 
 from steem import Steem
+from steem.utils import env_unlocked
+from steem.wallet import Wallet
 
 from .config import witness
 from .markets import Markets
 
+steem = Steem()
+markets = Markets(cache_timeout=30)
+wallet = Wallet(steemd_instance=steem.steemd)
 settings = {
     "sleep_time_seconds": 10 * 60,
     "minimum_spread_pct": 2.0,
@@ -13,7 +18,7 @@ settings = {
 }
 
 
-def get_last_published_price(steem, witness_name):
+def get_last_published_price(witness_name):
     my_info = steem.get_witness_by_account(witness_name)
     price = 0
     if float(my_info["sbd_exchange_rate"]["quote"].split()[0]) != 0:
@@ -23,13 +28,10 @@ def get_last_published_price(steem, witness_name):
 
 
 def refresh_price_feeds(witness_name):
-    steem = Steem()
-    markets = Markets()
-
-    print("\n" + time.ctime())
+    print(time.ctime())
 
     # old prices
-    old_adj_price = get_last_published_price(steem, witness_name)
+    old_adj_price = get_last_published_price(witness_name)
     print("Old Price: " + format(old_adj_price, ".3f"))
 
     # new prices
@@ -48,9 +50,21 @@ def refresh_price_feeds(witness_name):
     if spread > settings['minimum_spread_pct']:
         steem.commit.witness_feed_publish(steem_usd, quote=quote, account=witness_name)
         print("Updated the witness price feed.")
+    print('\n\n')
+
+
+def _unlock_steempy_wallet():
+    """ Unlock steempy wallet from cli input. """
+    if not env_unlocked():
+        Wallet.masterpassword = wallet.getPassword(text='BIP38 Wallet Password: ')
+        if wallet.locked():
+            print('No Wallet password. Quitting.')
+            quit(1)
 
 
 def run_price_feeds():
+    _unlock_steempy_wallet()
+
     while True:
         try:
             refresh_price_feeds(witness('name'))
