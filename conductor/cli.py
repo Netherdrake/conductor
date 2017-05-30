@@ -122,7 +122,7 @@ def update():
 
 @conductor.command(name='key-gen')
 def feed():
-    """Generate a random signing keypair."""
+    """Generate a random signing key-pair."""
     pk, pub = generate_signing_key()
     t = PrettyTable(["Private (install on your witness node)",
                      "Public (publish with 'conductor enable' command)"])

@@ -60,6 +60,14 @@ can do so using ``conductor update`` command.
     Aborted!
     ~ %
 
+Generating block signing key-pairs
+==================================
+Each node deployment should have its own signing key, to avoid double-signing.
+We can generate new random (``/dev/urandom`` based) key-pairs with a simple command:
+
+.. code-block::
+
+    conductor key-gen
 
 Enabling your witness
 =====================
