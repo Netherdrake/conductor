@@ -9,6 +9,7 @@ from tabulate import tabulate
 from .config import get_config, new_config, set_config
 from .feeds import run_price_feeds
 from .markets import Markets
+from .utils import generate_signing_key
 from .watchdog import (
     watchdog,
     enable_witness,
@@ -117,6 +118,18 @@ def update():
     set_config(c)
     witness_set_props(c['witness']['url'], c['props'])
     output('Witness %s Updated' % c['witness']['name'])
+
+
+@conductor.command(name='key-gen')
+def feed():
+    """Generate a random signing keypair."""
+    pk, pub = generate_signing_key()
+    t = PrettyTable(["Private (install on your witness node)",
+                     "Public (publish with 'conductor enable' command)"])
+    t.align = "l"
+    t.add_row([pk, pub])
+
+    output(t, '')
 
 
 # Operational Commands
