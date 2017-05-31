@@ -2,15 +2,13 @@ import time
 import traceback
 
 from steem import Steem
-from steem.utils import env_unlocked
-from steem.wallet import Wallet
 
 from .config import witness
 from .markets import Markets
+from .utils import unlock_steempy_wallet
 
 steem = Steem()
 markets = Markets(cache_timeout=30)
-wallet = Wallet(steemd_instance=steem.steemd)
 settings = {
     "sleep_time_seconds": 10 * 60,
     "minimum_spread_pct": 2.0,
@@ -53,26 +51,8 @@ def refresh_price_feeds(witness_name):
     print('\n\n')
 
 
-def _unlock_steempy_wallet():
-    """ Unlock steempy wallet from cli input. """
-    from steembase.storage import (
-        configStorage,
-        MasterPassword,
-    )
-    if wallet.MasterPassword.config_key in configStorage:
-        if not env_unlocked():
-            pwd = wallet.getPassword(text='BIP38 Wallet Password: ')
-            Wallet.masterpassword = MasterPassword(pwd).decrypted_master
-            if wallet.locked():
-                print('No Wallet password. Quitting.')
-                quit(1)
-        else:
-            print('steempy wallet does not exist. Please import your active key before publishing feeds.')
-            quit(1)
-
-
 def run_price_feeds():
-    _unlock_steempy_wallet()
+    unlock_steempy_wallet()
 
     while True:
         try:
