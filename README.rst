@@ -155,6 +155,7 @@ This module interfaces with 3rd party exchanges to fetch VWAP (volume weighted a
    conductor feed
 
 
+**Peg Support**
 Price feeds support SBD peg signalling. You can explicitly define whether or not you'd like to introduce bias
 to your price to support the loose $1 USD == $1 SBD peg. If no option is provided, pegging is enabled by default.
 
