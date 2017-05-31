@@ -3,6 +3,17 @@ conductor - Steem Witness Toolkit
 
 *conductor* is a user friendly, KISS utility for creating, updating and management of your witness.
 
+Requirements
+============
+This tool has been tested on Linux, and requires **Python 3.5 or higher**.
+
+On Ubuntu, you also need to install libssl-dev for cryptographic utilities.
+
+.. code-block::
+
+   sudo apt-get install libssl-dev
+
+
 Install
 =======
 
