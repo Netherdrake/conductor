@@ -55,10 +55,19 @@ def refresh_price_feeds(witness_name):
 
 def _unlock_steempy_wallet():
     """ Unlock steempy wallet from cli input. """
-    if not env_unlocked():
-        Wallet.masterpassword = wallet.getPassword(text='BIP38 Wallet Password: ')
-        if wallet.locked():
-            print('No Wallet password. Quitting.')
+    from steembase.storage import (
+        configStorage,
+        MasterPassword,
+    )
+    if wallet.MasterPassword.config_key in configStorage:
+        if not env_unlocked():
+            pwd = wallet.getPassword(text='BIP38 Wallet Password: ')
+            Wallet.masterpassword = MasterPassword(pwd).decrypted_master
+            if wallet.locked():
+                print('No Wallet password. Quitting.')
+                quit(1)
+        else:
+            print('steempy wallet does not exist. Please import your active key before publishing feeds.')
             quit(1)
 
 
