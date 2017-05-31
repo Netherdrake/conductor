@@ -1,4 +1,5 @@
 import time
+import traceback
 
 from steem import Steem
 
@@ -70,14 +71,17 @@ def watchdog(disable_after: int, second_key: str = None):
 
     threshold = total_missed() + disable_after
     while True:
-        if total_missed() > threshold:
-            if second_key:
-                witness_set_signing_key(second_key)
-                print("Witness %s failed over to key: %s" % (witness('name'), second_key))
-                watchdog(disable_after, None)
-            else:
-                disable_witness()
-                print("Witness %s Disabled!" % witness('name'))
-            return
+        try:
+            if total_missed() > threshold:
+                if second_key:
+                    witness_set_signing_key(second_key)
+                    print("Witness %s failed over to key: %s" % (witness('name'), second_key))
+                    watchdog(disable_after, None)
+                else:
+                    disable_witness()
+                    print("Witness %s Disabled!" % witness('name'))
+                return
+        except:
+            print(traceback.format_exc())
 
         time.sleep(60)
