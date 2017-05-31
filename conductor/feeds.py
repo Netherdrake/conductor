@@ -25,7 +25,7 @@ def get_last_published_price(witness_name):
     return price
 
 
-def refresh_price_feeds(witness_name):
+def refresh_price_feeds(witness_name, support_peg=settings['sbd_usd_peg']):
     print(time.ctime())
 
     # old prices
@@ -35,7 +35,7 @@ def refresh_price_feeds(witness_name):
     # new prices
     steem_usd = markets.steem_usd_implied()
     sbd_usd = markets.sbd_usd_implied()
-    quote = round(1 / sbd_usd, 3) if settings['sbd_usd_peg'] else "1.000"
+    quote = round(1 / sbd_usd, 3) if support_peg else "1.000"
     quote_adj_current_price = round(steem_usd / float(quote), 3)
     print('New Price: %s' % quote_adj_current_price)
     print('\nCurrent STEEM price: %.3f USD' % steem_usd)
@@ -51,12 +51,12 @@ def refresh_price_feeds(witness_name):
     print('\n\n')
 
 
-def run_price_feeds():
+def run_price_feeds(**kwargs):
     unlock_steempy_wallet()
 
     while True:
         try:
-            refresh_price_feeds(witness('name'))
+            refresh_price_feeds(witness('name'), **kwargs)
             time.sleep(settings['sleep_time_seconds'])
         except KeyboardInterrupt:
             print('Quitting...')
