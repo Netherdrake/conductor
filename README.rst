@@ -143,6 +143,15 @@ This module interfaces with 3rd party exchanges to fetch VWAP (volume weighted a
 
    conductor feed
 
+
+Price feeds support SBD peg signalling. You can explicitly define whether or not you'd like to introduce bias
+to your price to support the loose $1 USD == $1 SBD peg. If no option is provided, pegging is enabled by default.
+
+.. code-block::
+
+   conductor feed --sbd-peg
+   conductor feed --no-sbd-peg
+
 Usage
 =====
 
@@ -161,6 +170,7 @@ Usage
       enable       Enable a witness, or change key.
       feed         Update Price Feeds.
       init         Add your witness account.
+      key-gen      Generate a random signing key-pair.
       kill-switch  Monitor for misses w/ disable.
       status       Print basic witness info.
       tickers      Print Tickers.
