@@ -1,4 +1,4 @@
-from pprint import pprint
+import json
 
 import click
 from click import echo
@@ -32,7 +32,7 @@ def output(data, title=None):
         heading(title)
 
     if type(data) == dict:
-        pprint(data)
+        print(json.dumps(data, indent=4))
     else:
         echo(data)
 

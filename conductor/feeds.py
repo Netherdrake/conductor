@@ -12,7 +12,6 @@ markets = Markets(cache_timeout=30)
 settings = {
     "sleep_time_seconds": 10 * 60,
     "minimum_spread_pct": 2.0,
-    "sbd_usd_peg": True,
 }
 
 
@@ -25,7 +24,7 @@ def get_last_published_price(witness_name):
     return price
 
 
-def refresh_price_feeds(witness_name, support_peg=settings['sbd_usd_peg']):
+def refresh_price_feeds(witness_name, support_peg=False):
     print(time.ctime())
 
     # old prices
