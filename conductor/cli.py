@@ -135,7 +135,7 @@ def feed():
 # Operational Commands
 # --------------------
 @conductor.command()
-@click.option('--sbd-peg/--no-sbd-peg', default=True)
+@click.option('--sbd-peg/--no-sbd-peg', default=False)
 def feed(sbd_peg):
     """Update Price Feeds."""
     run_price_feeds(support_peg=sbd_peg)
