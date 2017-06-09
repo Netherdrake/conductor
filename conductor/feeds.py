@@ -24,7 +24,7 @@ def get_last_published_price(witness_name):
     return price
 
 
-def refresh_price_feeds(witness_name, support_peg=False):
+def refresh_price_feeds(witness_name, support_peg=False, bias=0.0):
     print(time.ctime())
 
     # old prices

@@ -22,7 +22,7 @@ class Tickers(object):
             "https://www.bitstamp.net/api/v2/ticker/btcusd/",
             "https://btc-e.com/api/2/btc_usd/ticker",
         ]
-        responses = list(silent(requests.get)(u, timeout=5) for u in urls)
+        responses = list(silent(requests.get)(u, timeout=15) for u in urls)
 
         for r in [x for x in responses if hasattr(x, "status_code") and x.status_code == 200 and x.json()]:
             if "bitfinex" in r.url:
@@ -57,7 +57,7 @@ class Tickers(object):
             "https://poloniex.com/public?command=returnTicker",
             "https://bittrex.com/api/v1.1/public/getticker?market=BTC-STEEM",
         ]
-        responses = list(silent(requests.get)(u, timeout=5) for u in urls)
+        responses = list(silent(requests.get)(u, timeout=15) for u in urls)
 
         for r in [x for x in responses if hasattr(x, "status_code") and x.status_code == 200 and x.json()]:
             if "poloniex" in r.url:
@@ -80,7 +80,7 @@ class Tickers(object):
             "https://poloniex.com/public?command=returnTicker",
             "https://bittrex.com/api/v1.1/public/getticker?market=BTC-SBD",
         ]
-        responses = list(silent(requests.get)(u, timeout=5) for u in urls)
+        responses = list(silent(requests.get)(u, timeout=15) for u in urls)
 
         for r in [x for x in responses if hasattr(x, "status_code") and x.status_code == 200 and x.json()]:
             if "poloniex" in r.url:
@@ -124,25 +124,28 @@ class Markets(Tickers):
         self._steem_btc = None
         self._sbd_btc = None
 
-    def _has_cache_expired(self):
-        if self._cache_timer + self._cache_timeout < time.time():
-            self._cache_timer = time.time()
-            return True
-        return False
+    # def _has_cache_expired(self):
+    #     if self._cache_timer + self._cache_timeout < time.time():
+    #         self._cache_timer = time.time()
+    #         return True
+    #     return False
 
     def btc_usd(self):
-        if (self._btc_usd is None) or self._has_cache_expired():
-            self._btc_usd = self.btc_usd_ticker()
+        # if (self._btc_usd is None) or self._has_cache_expired():
+        #     self._btc_usd = self.btc_usd_ticker()
+        self._btc_usd = self.btc_usd_ticker()
         return self._btc_usd
 
     def steem_btc(self):
-        if (self._steem_btc is None) or self._has_cache_expired():
-            self._steem_btc = self.steem_btc_ticker()
+        # if (self._steem_btc is None) or self._has_cache_expired():
+        #     self._steem_btc = self.steem_btc_ticker()
+        self._steem_btc = self.steem_btc_ticker()
         return self._steem_btc
 
     def sbd_btc(self):
-        if (self._sbd_btc is None) or self._has_cache_expired():
-            self._sbd_btc = self.sbd_btc_ticker()
+        # if (self._sbd_btc is None) or self._has_cache_expired():
+        #     self._sbd_btc = self.sbd_btc_ticker()
+        self._sbd_btc = self.sbd_btc_ticker()
         return self._sbd_btc
 
     def steem_sbd_implied(self):
