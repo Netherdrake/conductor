@@ -8,7 +8,6 @@ from .markets import Markets
 from .utils import unlock_steempy_wallet
 
 steem = Steem()
-markets = Markets(cache_timeout=30)
 settings = {
     "sleep_time_seconds": 10 * 60,
     "minimum_spread_pct": 2.0,
@@ -26,6 +25,7 @@ def get_last_published_price(witness_name):
 
 def refresh_price_feeds(witness_name, support_peg=False):
     print(time.ctime())
+    markets = Markets(cache_timeout=30)
 
     # old prices
     old_adj_price = get_last_published_price(witness_name)

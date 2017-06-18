@@ -7,7 +7,7 @@ assert sys.version_info[0] == 3 and sys.version_info[1] >= 5, "conductor require
 
 setup(
     name='conductor',
-    version='0.2.1',
+    version='0.2.3',
     description='Steem Witness Toolkit',
     long_description=open('README.rst').read(),
     packages=find_packages(),
