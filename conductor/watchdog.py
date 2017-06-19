@@ -69,6 +69,9 @@ def watchdog(disable_after: int, second_key: str = None):
         print("Cannot monitor a disabled witness.")
         return
 
+    # unlock the wallet when process starts
+    unlock_steempy_wallet()
+
     threshold = total_missed() + disable_after
     while True:
         try:
