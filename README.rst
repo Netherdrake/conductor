@@ -56,7 +56,7 @@ can do so using ``conductor update`` command.
 
     ~ % conductor update
     What should be your witness URL? [https://steemdb.com/@furion/witness]:
-    How much should be account creation fee? [0.500 STEEM]:
+    How much do you want the account creation fee to be (STEEM)? [0.500 STEEM]:
     What should be the maximum block size? [65536]:
     What should be the SBD interest rate? [0]: 10
 
