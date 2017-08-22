@@ -11,7 +11,8 @@ On Ubuntu, you also need to install libssl-dev for cryptographic utilities.
 
 .. code-block::
 
-   sudo apt-get install libssl-dev
+   sudo apt install python3-pip python3.5-dev
+   sudo apt install libssl-dev
 
 
 Install
@@ -19,7 +20,7 @@ Install
 
 .. code-block::
 
-   pip install -U git+https://github.com/Netherdrake/conductor
+   pip3 install -U git+https://github.com/Netherdrake/conductor
 
 
 First Steps
