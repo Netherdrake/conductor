@@ -8,7 +8,7 @@ assert sys.version_info[0] == 3 and sys.version_info[1] >= 5, "conductor require
 
 setup(
     name='conductor',
-    version='0.2.4',
+    version='0.2.5',
     description='Steem Witness Toolkit',
     long_description=open('README.rst').read(),
     packages=find_packages(),
@@ -17,11 +17,13 @@ setup(
                    'pytest-pylint',
                    'pytest-console-scripts'],
     install_requires=[
-        # 'git+git://github.com/Netherdrake/steem-python',
         'Click',
         'click-spinner',
         'tabulate',
         'requests',
+    ],
+    dependency_links=[
+       'git+git://github.com/Netherdrake/steem-python'
     ],
     entry_points={
         'console_scripts': [

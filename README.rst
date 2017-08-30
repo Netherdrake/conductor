@@ -10,12 +10,14 @@ This tool has been tested on Linux, and requires **Python 3.5 or higher**.
 On Ubuntu, you also need to install libssl-dev for cryptographic utilities.
 
 .. code-block::
+
    sudo apt install libffi-dev libssl-dev python3 python3-dev python3-pip
 
 
 We also need the Python library for Steem.
 
 .. code-block::
+
    pip3 install -U git+git://github.com/Netherdrake/steem-python
 
 
