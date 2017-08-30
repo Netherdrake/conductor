@@ -10,13 +10,12 @@ This tool has been tested on Linux, and requires **Python 3.5 or higher**.
 On Ubuntu, you also need to install libssl-dev for cryptographic utilities.
 
 .. code-block::
-
    sudo apt install libffi-dev libssl-dev python3 python3-dev python3-pip
 
 
 We also need the Python library for Steem.
-.. code-block::
 
+.. code-block::
    pip3 install -U git+git://github.com/Netherdrake/steem-python
 
 
@@ -62,7 +61,7 @@ can do so using ``conductor update`` command.
 
     ~ % conductor update
     What should be your witness URL? [https://steemdb.com/@furion/witness]:
-    How much should be account creation fee? [0.500 STEEM]:
+    How much do you want the account creation fee to be (STEEM)? [0.500 STEEM]:
     What should be the maximum block size? [65536]:
     What should be the SBD interest rate? [0]: 10
 

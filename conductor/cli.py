@@ -73,7 +73,7 @@ def init():
             default=c['witness']['url'],
         )
         c['props']['account_creation_fee'] = click.prompt(
-            'How much should be account creation fee?',
+            'How much do you want the account creation fee to be (STEEM)?',
             default=c['props']['account_creation_fee'],
         )
         c['props']['maximum_block_size'] = click.prompt(
@@ -98,7 +98,7 @@ def update():
         default=c['witness']['url'],
     )
     c['props']['account_creation_fee'] = click.prompt(
-        'How much should be account creation fee?',
+        'How much do you want the account creation fee to be (STEEM)?',
         default=c['props']['account_creation_fee'],
     )
     c['props']['maximum_block_size'] = click.prompt(
