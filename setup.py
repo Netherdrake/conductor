@@ -1,5 +1,6 @@
 # coding=utf-8
 import sys
+
 from setuptools import find_packages
 from setuptools import setup
 
@@ -16,13 +17,11 @@ setup(
                    'pytest-pylint',
                    'pytest-console-scripts'],
     install_requires=[
+        # 'git+git://github.com/Netherdrake/steem-python',
         'Click',
         'click-spinner',
-        'steem',
         'tabulate',
-        # 'maya',
-        # 'toolz',
-        # 'funcy',
+        'requests',
     ],
     entry_points={
         'console_scripts': [

@@ -11,7 +11,13 @@ On Ubuntu, you also need to install libssl-dev for cryptographic utilities.
 
 .. code-block::
 
-   sudo apt-get install libssl-dev
+   sudo apt install libffi-dev libssl-dev python3 python3-dev python3-pip
+
+
+We also need the Python library for Steem.
+.. code-block::
+
+   pip3 install -U git+git://github.com/Netherdrake/steem-python
 
 
 Install
@@ -19,7 +25,7 @@ Install
 
 .. code-block::
 
-   pip install -U git+https://github.com/Netherdrake/conductor
+   pip3 install -U git+https://github.com/Netherdrake/conductor
 
 
 First Steps
