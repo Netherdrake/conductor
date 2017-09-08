@@ -43,9 +43,11 @@ context_settings = dict(help_option_names=['-h', '--help'])
 
 
 @click.group(context_settings=context_settings)
-def conductor():
+@click.pass_context
+def conductor(ctx):
     """Steem Witness Toolkit."""
-    pass
+    if ctx.invoked_subcommand not in ['init', 'tickers', 'keygen']:
+        ensure_witness_hook()
 
 
 # Config Commands
@@ -177,7 +179,10 @@ def tickers():
             "SBD/USD": round(m.sbd_usd_implied(), 3),
             "STEEM/USD": round(m.steem_usd_implied(), 3),
         }
-    echo(tabulate(data.items(), headers=['Symbol', 'Price'], numalign="right", tablefmt='orgtbl'))
+    echo(tabulate(
+        data.items(),
+        headers=['Symbol', 'Price'],
+        numalign="right", tablefmt='orgtbl'))
 
 
 @conductor.command(name='status')
@@ -194,3 +199,17 @@ def status():
 
     output(t, 'Status')
     output(get_config(), 'Configuration')
+
+
+def ensure_witness_hook():
+    """ Ensure the config file exists. Sync witness props from steem."""
+    try:
+        c = get_config()
+        witness = get_witness(c['witness']['name'])
+        c['witness']['url'] = witness['url']
+        c['props'] = witness['props']
+        set_config(c)
+    except FileNotFoundError:
+        print("Your witness has not been setup yet. Please run:\n",
+              "conductor init")
+        quit(1)

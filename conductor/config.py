@@ -1,7 +1,7 @@
 import json
 from os.path import expanduser
 
-config_file = expanduser('~/.witness.json')
+config_file = expanduser('~/.conductor.json')
 
 
 def new_config():
