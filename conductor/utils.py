@@ -24,5 +24,6 @@ def unlock_steempy_wallet():
                 print('No Wallet password. Quitting.')
                 quit(1)
     else:
-        print('steempy wallet does not exist. Please import your active key before publishing feeds.')
+        print('steempy wallet does not exist.'
+              'Please import your active key before publishing feeds.')
         quit(1)

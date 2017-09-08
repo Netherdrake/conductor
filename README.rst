@@ -85,7 +85,7 @@ We can generate new random (``/dev/urandom`` based) key-pairs with a simple comm
 
 .. code-block::
 
-    conductor key-gen
+    conductor keygen
 
 Enabling your witness
 =====================
@@ -130,14 +130,14 @@ By default ``-n`` is 10.
 Automatic Failover
 ==================
 We can use the Kill Switch to automatically failover as well. Instead of disabling our witness, the kill-switch
-can change our signing key to secondary key (backup node), and then monitor that. If second node misses blocks as well,
-the witness is finally disabled.
+can change our signing key to secondary key (backup node), and then monitor that. If all keys
+provided trough `-k` flags miss blocks as well, the witness is finally disabled.
 
 **Example**
 
 .. code-block::
 
-   conductor kill-switch --second-key <BACKUP_NODE_PUBLIC_SIGNING_KEY>
+   conductor kill-switch -n 2 -k <BACKUP_NODE_PUBLIC_SIGNING_KEY> -k <BACKUP_NODE_2> ...
 
 See ``conductor kill-switch -h`` for more options.
 
@@ -151,7 +151,7 @@ Furthermore, the prices may contain *bias* to loosely support the SBD stablecoin
 This module interfaces with 3rd party exchanges to fetch VWAP (volume weighted average prices) mean (average of VWAP's from all exchanges) prices.
 
 **Exchanges Used:**
- * Bitstamp, Bitfinex, Kraken, OKCoin, BTC-E for BTC/USD
+ * Bitstamp, Bitfinex, Kraken, OKCoin  for BTC/USD
  * Poloniex, Bittrex for STEEM/BTC and SBD/BTC
 
 
@@ -185,15 +185,15 @@ Usage
       -h, --help  Show this message and exit.
 
     Commands:
-      disable      Disable a witness.
-      enable       Enable a witness, or change key.
-      feed         Update Price Feeds.
-      init         Add your witness account.
-      key-gen      Generate a random signing key-pair.
-      kill-switch  Monitor for misses w/ disable.
-      status       Print basic witness info.
-      tickers      Print Tickers.
-      update       Update witness properties.
+    disable      Disable a witness.
+    enable       Enable a witness, or change key.
+    feed         Update Price Feeds.
+    init         Add your witness account.
+    keygen       Generate a random signing key-pair.
+    kill-switch  Monitor for misses w/ disable.
+    status       Print basic witness info.
+    tickers      Print Tickers.
+    update       Update witness properties.
 
 
 There are two additional, read only commands we haven't covered yet. ``status`` and ``tickers``.
