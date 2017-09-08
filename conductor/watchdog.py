@@ -82,16 +82,16 @@ def watchdog(disable_after: int, keys: List[str]):
             # detect new misses
             diff = total_missed() - misses
             if diff:
-                print("Missed %s new blocks!" % misses)
+                print("Missed %s new blocks!" % diff)
                 for _ in range(diff):
                     miss_history.append(dt.datetime.now())
                 misses += diff
 
             # purge old misses
             miss_history = [x for x in miss_history if
-                            dt.datetime.now() - dt.timedelta(hours=24) < x]
+                            x + dt.timedelta(hours=24) > dt.datetime.now()]
 
-            if len(miss_history) > disable_after:
+            if len(miss_history) >= disable_after:
                 if keys:
                     witness_set_signing_key(keys[0])
                     print("Witness %s failed over to key: %s" % (witness('name'), keys[0]))
