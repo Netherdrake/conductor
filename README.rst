@@ -40,6 +40,21 @@ To create the wallet, and add our key to it, simply run:
 
    steempy addkey
 
+(Optional)
+If you wish not to have to type your BIP38 wallet password every time you use conductor,
+set the UNLOCK environment variable.
+
+.. code-block::
+
+    export UNLOCK=your-wallet-pw
+
+(Optional)
+You may also want to set backup RPC nodes to add resilience to conductor.
+
+.. code-block::
+
+    steempy set nodes https://steemd.steemit.com,https://rpc.steemliberator.com,https://gtg.steem.house:8090
+
 
 Creating or importing your witness
 ==================================
