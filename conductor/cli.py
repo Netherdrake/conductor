@@ -120,8 +120,8 @@ def update():
     output('Witness %s Updated' % c['witness']['name'])
 
 
-@conductor.command(name='key-gen')
-def feed():
+@conductor.command(name='keygen')
+def keygen():
     """Generate a random signing key-pair."""
     pk, pub = generate_signing_key()
     t = PrettyTable(["Private (install on your witness node)",
@@ -158,11 +158,11 @@ def disable():
 
 
 @conductor.command(name='kill-switch')
-@click.option('--disable-after', '-n', default=10)
-@click.option('--second-key', '-k', default=None)
-def kill_switch(disable_after, second_key):
+@click.option('--disable-after', '-n', default=5)
+@click.option('--keys', '-k', default=None, multiple=True)
+def kill_switch(disable_after, keys):
     """Monitor for misses w/ disable."""
-    watchdog(disable_after, second_key)
+    watchdog(disable_after, keys)
 
 
 # Status Commands

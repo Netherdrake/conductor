@@ -1,5 +1,7 @@
+import datetime as dt
 import time
 import traceback
+from typing import List
 
 from steem import Steem
 
@@ -64,7 +66,7 @@ def disable_witness():
         return witness_set_signing_key('')
 
 
-def watchdog(disable_after: int, second_key: str = None):
+def watchdog(disable_after: int, keys: List[str]):
     if not is_witness_enabled():
         print("Cannot monitor a disabled witness.")
         return
@@ -72,14 +74,28 @@ def watchdog(disable_after: int, second_key: str = None):
     # unlock the wallet when process starts
     unlock_steempy_wallet()
 
-    threshold = total_missed() + disable_after
+    misses = total_missed()
+    miss_history = []
+    print("Monitoring the witness, current misses: %s" % misses)
     while True:
         try:
-            if total_missed() > threshold:
-                if second_key:
-                    witness_set_signing_key(second_key)
-                    print("Witness %s failed over to key: %s" % (witness('name'), second_key))
-                    watchdog(disable_after, None)
+            # detect new misses
+            diff = total_missed() - misses
+            if diff:
+                print("Missed %s new blocks!" % misses)
+                for _ in range(diff):
+                    miss_history.append(dt.datetime.now())
+                misses += diff
+
+            # purge old misses
+            miss_history = [x for x in miss_history if
+                            dt.datetime.now() - dt.timedelta(hours=24) < x]
+
+            if len(miss_history) > disable_after:
+                if keys:
+                    witness_set_signing_key(keys[0])
+                    print("Witness %s failed over to key: %s" % (witness('name'), keys[0]))
+                    watchdog(disable_after, keys[1:])
                 else:
                     disable_witness()
                     print("Witness %s Disabled!" % witness('name'))
@@ -87,4 +103,4 @@ def watchdog(disable_after: int, second_key: str = None):
         except:
             print(traceback.format_exc())
 
-        time.sleep(60)
+        time.sleep(30)
