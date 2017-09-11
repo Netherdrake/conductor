@@ -53,7 +53,7 @@ You may also want to set backup RPC nodes to add resilience to conductor.
 
 .. code-block::
 
-    steempy set nodes https://steemd.steemit.com,https://rpc.steemliberator.com,https://gtg.steem.house:8090
+    steempy set nodes https://steemd.steemit.com,https://rpc.steemliberator.com,https://gtg.steem.house:8090,https://steemd.privex.io
 
 
 Creating or importing your witness
