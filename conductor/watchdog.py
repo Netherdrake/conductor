@@ -100,7 +100,14 @@ def watchdog(disable_after: int, keys: List[str]):
                     disable_witness()
                     print("Witness %s Disabled!" % witness('name'))
                 return
+        except (AttributeError, TypeError):
+            # NoneType response by http_client
+            global steem
+            steem = Steem()
+            print(time.ctime())
+            print(traceback.format_exc())
         except:
+            print(time.ctime())
             print(traceback.format_exc())
 
         time.sleep(30)
