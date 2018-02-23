@@ -17,7 +17,7 @@ class Tickers(object):
         prices = {}
         urls = [
             "https://api.bitfinex.com/v1/pubticker/BTCUSD",
-            # "https://api.coinbase.com/v2/prices/BTC-USD/spot",
+            "https://api.gdax.com/products/BTC-USD/ticker",
             "https://api.kraken.com/0/public/Ticker?pair=XBTUSD",
             "https://www.okcoin.com/api/v1/ticker.do?symbol=btc_usd",
             "https://www.bitstamp.net/api/v2/ticker/btcusd/",
@@ -31,6 +31,12 @@ class Tickers(object):
                     data = r.json()
                     prices['bitfinex'] = {
                         'price': float(data['last_price']),
+                        'volume': float(data['volume'])}
+            elif "gdax" in r.url:
+                with suppress(KeyError):
+                    data = r.json()
+                    prices['gdax'] = {
+                        'price': float(data['price']),
                         'volume': float(data['volume'])}
             elif "kraken" in r.url:
                 with suppress(KeyError):
@@ -50,12 +56,6 @@ class Tickers(object):
                     prices['bitstamp'] = {
                         'price': float(data['last']),
                         'volume': float(data['volume'])}
-            elif "btce" in r.url:
-                with suppress(KeyError):
-                    data = r.json()["ticker"]
-                    prices['btce'] = {
-                        'price': float(data['avg']),
-                        'volume': float(data['vol_cur'])}
 
         if verbose:
             pprint(prices)
@@ -74,6 +74,7 @@ class Tickers(object):
         urls = [
             "https://poloniex.com/public?command=returnTicker",
             "https://bittrex.com/api/v1.1/public/getmarketsummary?market=BTC-STEEM",
+            "https://api.binance.com/api/v1/ticker/24hr",
         ]
         responses = list(silent(requests.get)(u, timeout=30) for u in urls)
 
@@ -90,6 +91,12 @@ class Tickers(object):
                     data = r.json()["result"][0]
                     price = (data['Bid'] + data['Ask']) / 2
                     prices['bittrex'] = {'price': price, 'volume': data['BaseVolume']}
+            elif "binance" in r.url:
+                with suppress(KeyError):
+                    data = [x for x in r.json() if x['symbol'] == 'STEEMBTC'][0]
+                    prices['binance'] = {
+                        'price': float(data['lastPrice']),
+                        'volume': float(data['quoteVolume'])}
 
         if len(prices) == 0:
             raise RuntimeError("Obtaining STEEM/BTC prices has failed from all sources.")
