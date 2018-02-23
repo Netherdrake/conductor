@@ -7,7 +7,7 @@ from .config import witness
 from .markets import Markets
 from .utils import unlock_steempy_wallet
 
-steem = Steem()
+steem = Steem(tcp_keepalive=False)
 settings = {
     "sleep_time_seconds": 10 * 60,
     "minimum_spread_pct": 2.0,
@@ -63,6 +63,7 @@ def run_price_feeds(**kwargs):
             print('Quitting...')
             return
         except:
+            print(time.ctime())
             print(traceback.format_exc())
             time.sleep(10)
 

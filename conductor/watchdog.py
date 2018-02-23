@@ -8,7 +8,7 @@ from steem import Steem
 from .config import witness, props
 from .utils import unlock_steempy_wallet
 
-steem = Steem()
+steem = Steem(tcp_keepalive=False)
 null_key = 'STM1111111111111111111111111111111114T1Anm'
 
 
@@ -101,6 +101,7 @@ def watchdog(disable_after: int, keys: List[str]):
                     print("Witness %s Disabled!" % witness('name'))
                 return
         except:
+            print(time.ctime())
             print(traceback.format_exc())
 
         time.sleep(30)
