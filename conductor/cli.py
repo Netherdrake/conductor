@@ -3,7 +3,9 @@ import json
 import click
 from click import echo
 from click_spinner import spinner
+from funcy import silent
 from prettytable import PrettyTable
+from steem.amount import Amount
 from tabulate import tabulate
 
 from .config import get_config, new_config, set_config
@@ -74,10 +76,14 @@ def init():
             'What should be your witness URL?',
             default=c['witness']['url'],
         )
-        c['props']['account_creation_fee'] = click.prompt(
+        creation_fee = click.prompt(
             'How much do you want the account creation fee to be (STEEM)?',
             default=c['props']['account_creation_fee'],
         )
+        if silent(float)(creation_fee):
+            creation_fee = "%s STEEM" % float(creation_fee)
+        c['props']['account_creation_fee'] = str(Amount(creation_fee))
+
         c['props']['maximum_block_size'] = click.prompt(
             'What should be the maximum block size?',
             default=c['props']['maximum_block_size'],
@@ -99,10 +105,14 @@ def update():
         'What should be your witness URL?',
         default=c['witness']['url'],
     )
-    c['props']['account_creation_fee'] = click.prompt(
+    creation_fee = click.prompt(
         'How much do you want the account creation fee to be (STEEM)?',
         default=c['props']['account_creation_fee'],
     )
+    if silent(float)(creation_fee):
+        creation_fee = "%s STEEM" % float(creation_fee)
+    c['props']['account_creation_fee'] = str(Amount(creation_fee))
+
     c['props']['maximum_block_size'] = click.prompt(
         'What should be the maximum block size?',
         default=c['props']['maximum_block_size'],
