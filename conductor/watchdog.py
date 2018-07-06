@@ -6,7 +6,11 @@ from typing import List
 from steem import Steem
 
 from .config import witness, props
-from .utils import unlock_steempy_wallet, head_block_lag
+from .utils import (
+    unlock_steempy_wallet,
+    head_block_lag,
+    wait_for_healthy_node,
+)
 
 steem = Steem(tcp_keepalive=False)
 null_key = 'STM1111111111111111111111111111111114T1Anm'
@@ -74,15 +78,14 @@ def watchdog(disable_after: int, keys: List[str]):
     # unlock the wallet when process starts
     unlock_steempy_wallet()
 
+    wait_for_healthy_node(steem)
     misses = total_missed()
     miss_history = []
     print("Monitoring the witness, current misses: %s" % misses)
     while True:
         try:
             # enforce we're on a healthy rpc node
-            while head_block_lag(steem) > 100:
-                print("RPC Node %s is unhealthy. Skipping..." % steem.hostname)
-                steem.next_node()
+            wait_for_healthy_node(steem)
 
             # detect new misses
             diff = total_missed() - misses
