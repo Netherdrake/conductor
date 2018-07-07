@@ -38,7 +38,7 @@ def head_block_lag(steemd_instance) -> int:
     return (dt.utcnow() - head_block_time).seconds
 
 
-def wait_for_healthy_node(steem, blocks=100):
-    while head_block_lag(steem) > blocks:
+def wait_for_healthy_node(steem, seconds=120):
+    while head_block_lag(steem) > seconds:
         print("RPC Node %s is unhealthy. Skipping..." % steem.hostname)
         steem.next_node()
