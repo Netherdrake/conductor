@@ -3,7 +3,7 @@ from steem.wallet import Wallet
 from steembase.account import PrivateKey
 from steembase.storage import (
     configStorage,
-    MasterPassword,
+    KeyEncryptionKey,
 )
 from datetime import datetime as dt
 
@@ -17,10 +17,10 @@ def generate_signing_key():
 def unlock_steempy_wallet():
     """ Unlock steempy wallet from cli input. """
     wallet = Wallet()
-    if MasterPassword.config_key in configStorage:
+    if KeyEncryptionKey.config_key in configStorage:
         if not env_unlocked() and not Wallet.masterpassword:
             pwd = wallet.getPassword(text='BIP38 Wallet Password: ')
-            Wallet.masterpassword = MasterPassword(pwd).decrypted_master
+            Wallet.masterpassword = KeyEncryptionKey(pwd).decrypted_master
             if wallet.locked():
                 print('No Wallet password. Quitting.')
                 quit(1)
