@@ -14,6 +14,8 @@ def new_config():
         'account_creation_fee': '0.500 STEEM',
         'maximum_block_size': 65536,
         'sbd_interest_rate': 0,
+        'account_subsidy_budget': 797,
+        'account_subsidy_decay': 347321,
     }
 
     return c

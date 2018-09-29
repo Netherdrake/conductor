@@ -131,6 +131,8 @@ Kill Switch
 Kill Switch is a witness monitoring utility, that tracks block misses. If your witness server bugs out, and stops producing blocks,
 this tool will automatically disable your witness to avoid further misses.
 
+As of HF20, you must have exported your unlock password to your env (export UNLOCK='your_pwd') to use the killswitch.
+
 **To run a killswitch, simply run:**
 
 .. code-block::
