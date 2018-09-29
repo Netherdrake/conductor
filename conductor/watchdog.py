@@ -4,6 +4,7 @@ import traceback
 from typing import List
 
 from steem import Steem
+from steem.utils import env_unlocked
 
 from .config import witness, props
 from .utils import (
@@ -29,7 +30,6 @@ def current_signing_key():
 
 
 def witness_set_signing_key(signing_key):
-    unlock_steempy_wallet()
     return steem.commit.witness_update(
         signing_key=signing_key,
         url=witness('url'),
@@ -38,7 +38,6 @@ def witness_set_signing_key(signing_key):
 
 
 def witness_set_props(url, new_props):
-    unlock_steempy_wallet()
     return steem.commit.witness_update(
         signing_key=current_signing_key(),
         url=url,
@@ -48,7 +47,6 @@ def witness_set_props(url, new_props):
 
 def witness_create(config: dict):
     """ Create a new witness from config file. """
-    unlock_steempy_wallet()
     return steem.commit.witness_update(
         signing_key=null_key,
         url=config['witness']['name'],
@@ -75,8 +73,10 @@ def watchdog(disable_after: int, keys: List[str]):
         print("Cannot monitor a disabled witness.")
         return
 
-    # unlock the wallet when process starts
-    unlock_steempy_wallet()
+
+    if not env_unlocked():
+        print("Must use env variable for kill-switch.")
+        return
 
     wait_for_healthy_node(steem)
     misses = total_missed()

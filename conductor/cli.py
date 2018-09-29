@@ -92,6 +92,14 @@ def init():
             'What should be the SBD interest rate?',
             default=c['props']['sbd_interest_rate'],
         )
+        c['props']['account_subsidy_budget'] = click.prompt(
+            'What should be the account subsidy budget?',
+            default=c['props']['account_subsidy_budget'],
+        )
+        c['props']['account_subsidy_decay'] = click.prompt(
+            'What should be the account subsidy decay?',
+            default=c['props']['account_subsidy_decay'],
+        )
         set_config(c)
         witness_create(c)
         echo('Witness %s created!' % account)
@@ -120,6 +128,14 @@ def update():
     c['props']['sbd_interest_rate'] = click.prompt(
         'What should be the SBD interest rate?',
         default=c['props']['sbd_interest_rate'],
+    )
+    c['props']['account_subsidy_budget'] = click.prompt(
+        'What should be the account subsidy budget?',
+        default=c['props']['account_subsidy_budget'],
+    )
+    c['props']['account_subsidy_decay'] = click.prompt(
+        'What should be the account subsidy decay?',
+        default=c['props']['account_subsidy_decay'],
     )
 
     # verify
